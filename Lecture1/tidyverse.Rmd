@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 tidyverse
 ================
 sourced from https://github.com/michaellevy/tidyverse_talk/blob/master/tidyverse.md
@@ -163,7 +168,7 @@ movies %>%
 movies %>%
   filter(Animation == 1, votes > 1000) %>%
   select(title, rating) %>%
-  arrange(desc(rating)) -> a
+  arrange(desc(rating))
 ```
 
 
@@ -176,10 +181,10 @@ movies %>%
   group_by(year, mpaa) %>%
   summarize(avg_budget = mean(budget, na.rm = TRUE),
             avg_rating = mean(rating, na.rm = TRUE)) %>%
-  arrange(desc(year), mpaa) -> b
+  arrange(desc(year), mpaa) 
 
 
-cbind
+
 ```
 
  
