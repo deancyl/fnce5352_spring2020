@@ -1,19 +1,17 @@
 library(tidyverse)
 
-ggplot(mpg, aes(hwy, cty)) +  #data and aesthetics (x,y)
+# https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf
+
+ggplot(mpg, aes(hwy, cty)) +  #data and aesthetics (x,y) her's another change
   geom_point(aes(color = cyl)) + #add a layer element with "+"
   geom_smooth(method ="lm") + #layer = geom + default stat + layer-specific mappings
   coord_cartesian() + #additional elements
   scale_color_gradient() +
   theme_bw()
 
-
-#primitives
-a <- ggplot(economics, aes(date, unemploy))
-b <- ggplot(seals, aes(x = long, y = lat))
-
-a + geom_ribbon(aes(ymin=unemploy - 900,
-                    ymax=unemploy + 900))
+#line segments
+b <- ggplot(seals, (aes(x=long, y=lat)))
+b + geom_abline(aes(intercept=0, slope=1))
 
 #one variable continuous
 c <- ggplot(mpg, aes(x=hwy))
