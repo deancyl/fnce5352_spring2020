@@ -53,6 +53,9 @@ by_alley <- split(mini_ames, mini_ames$Alley)
 # map(.x, .f, ...)
 map(by_alley, head, n = 2)
 
+for (i in 1:length(by_alley)) {
+  head(by_alley[[i]], n=2) %>% print
+}
 
 # ------------------------------------------------------------------------------
 # Examples of purrr::map* (slide 13)
@@ -80,6 +83,7 @@ ames_lst_col %>%
 
 # ------------------------------------------------------------------------------
 # Hands-on: Quick Data Investigation (slide 15)
+# check out: http://jse.amstat.org/v19n3/decock/DataDocumentation.txt
 
 library(tidyverse)
 library(AmesHousing)
@@ -117,6 +121,8 @@ ggplot(ames, aes(x = Gr_Liv_Area, Sale_Price)) +
   scale_y_log10() + 
   facet_wrap(~Bldg_Type) + 
   geom_smooth(method = lm)
+
+
 
 
 # ------------------------------------------------------------------------------
