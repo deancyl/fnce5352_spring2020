@@ -296,7 +296,21 @@ names(ames_test_dummies)
 # any zero-variance predictors using the recipe reference site.
 # (https://tidymodels.github.io/recipes/reference/index.html)
 
+mod_rec2 <- recipe(
+  Sale_Price ~ Longitude + Latitude + Neighborhood, 
+  data = ames_train
+) %>%
+  step_log(Sale_Price, base = 10) %>%
+  
+  # Create dummy variables for _any_ factor variables
+  step_dummy(all_nominal()) %>%
+
+  step_nzv(all_predictors())
+  
+
 # Re-run the recipe with this step.
+mod_rec2_trained <- prep(mod_rec2, training = ames_train, verbose = TRUE)
+ames_train_dummies2 <- juice(mod_rec2_trained)
 
 # What were the results?
 
