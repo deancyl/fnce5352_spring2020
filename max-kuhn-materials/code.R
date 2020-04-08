@@ -545,6 +545,7 @@ knn_wfl <-
 knn_res <-
   cv_splits %>%
   mutate( workflows = map(splits, ~ fit( knn_wfl, data = analysis(.x)) ) ) 
+  #mutate( workflows = map(splits, function(x) fit(knn_wfl, data=analysis(x))))
 knn_res
 
 # ------------------------------------------------------------------------------
@@ -552,8 +553,12 @@ knn_res
 
 knn_pred <-                                              
   map2_dfr(knn_res$workflows, knn_res$splits,     
-           ~ predict(.x, assessment(.y)),                
+           ~ predict(.x, assessment(.y)),
+           #function(x, y) predict(x, assessment(y)),
            .id = "fold")                                 
+
+map_dbl(1:10, function(x) x+3)
+map_dbl(1:10, ~ .x + 3)
 
 prices <-  
   map_dfr(knn_res$splits,  
@@ -666,6 +671,10 @@ ctrl <- control_grid(verbose = TRUE)
 knn_tune <- 
   tune_grid(ames_rec, model = knn_mod, resamples = cv_splits, grid = knn_grid, control = ctrl)
 
+knn_tune
+knn_tune$.metrics[[1]]
+show_best(knn_tune, metric = "rmse", maximize = FALSE)
+
 knn_tune %>% 
   collect_metrics() %>% 
   dplyr::filter(.metric == "rmse") %>% 
@@ -761,6 +770,11 @@ chi_folds %>% nrow()
 
 lm(ridership ~ . - date, data = Chicago)
 
+lm(ridership ~ Irving_Park, data=Chicago) %>% summary
+lm(ridership ~ Belmont, data=Chicago) %>% summary
+lm(ridership ~ Irving_Park + Belmont, data=Chicago) %>% summary
+
+
 # ------------------------------------------------------------------------------
 # Tuning the Model (slide 26)
 
@@ -772,7 +786,8 @@ glmn_grid <- expand.grid(penalty = 10^seq(-3, -1, length = 20), mixture = (0:5)/
 glmn_rec <- chi_rec %>% step_normalize(all_predictors())
 
 glmn_mod <-
-  linear_reg(penalty = tune(), mixture = tune()) %>% set_engine("glmnet")
+  linear_reg(penalty = tune(), mixture = tune()) %>% 
+  set_engine("glmnet")
 
 # Save the assessment set predictions
 ctrl <- control_grid(save_pred = TRUE)
